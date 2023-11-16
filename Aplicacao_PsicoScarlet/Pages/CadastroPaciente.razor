@@ -1,0 +1,85 @@
+﻿@using Aplicacao_PsicoScarlet.Data
+
+@page "/cadastroPaciente"
+
+
+<div class="text-center" style="align-items:center">
+    <h1 class="card-title">Cadastro Paciente</h1>
+</div>
+<br />
+<br />
+
+
+<div class="card">
+    <div class="card-header" style="background-color:lavender;border-radius:3px">
+        <div class="text-lg-center" style="align-items:center">
+            <h3 class="card-title">Dados Pessoais</h3>
+        </div>
+    </div>
+    <div class="card-body">
+        <EditForm Model="paciente">
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <span class="oi oi-person"></span> <label for="nome">Nome Completo</label>
+                    <InputText placehold="Nome Completo" class="form-control" @bind-Value="teste"> </InputText>
+                </div>
+
+
+                <div class="form-group col-md-2">
+                    <br />
+                    <span class="oi oi-calendar"></span>
+                    <label for="datNascimento">Data de Nascimento</label>
+                    <InputDate class="form-control" @bind-Value="data"></InputDate>
+                </div>
+
+                <div class="form-group col-md-4">
+                    <br />
+                    <span class="oi oi-calendar"></span>
+                    <label for="datNascimento">Sexo</label>
+                    <InputSelect @bind-Value="escolha">
+                        <option value="@genero">Masculino</option>
+                        <option value="@genero">Feminino</option>
+                    </InputSelect>
+                </div>
+
+                <div class="form-group col-md-2">
+                    <br />
+                    <span class="oi oi-inbox"></span>
+                    <label for="email">Email</label>
+                    <InputText class="form-control" typeof="email" @bind-Value="email"></InputText>
+                </div>
+
+
+                <div class="form-group col-md--2">
+                    <br />
+                    <span class="oi oi-phone"></span>
+                    <label for="email">Telefone</label>
+                    <InputText class="form-control" typeof="fone" @bind-Value="fone" type="number"></InputText>
+                </div>
+            </div>
+        </EditForm>
+
+    </div>
+
+    <div class="card-footer" style=" background-color:lavender;border-radius:3px;height:55px">
+    </div>
+</div>
+@code {
+    Paciente paciente = new Paciente();
+    public string teste = "";
+    public int num = 0;
+    public DateTime data = DateTime.Now.Date;
+    String[] genero;
+    String escolha;
+    string email = "";
+    string ddd;
+    string fone;
+
+    public class Paciente
+    {
+        string Nome { get; set; } = String.Empty;
+        DateTime data { get; set; } = DateTime.Today;
+        String[] genero { get; set; }
+        String escolha { get; set; }
+    }
+}
