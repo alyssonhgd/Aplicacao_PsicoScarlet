@@ -1,0 +1,17 @@
+﻿@page "/Agenda"
+@using System.Collections.Concurrent;
+
+<Calendar ValueChanged="@OnValueChanged" />
+
+
+@code {
+
+    private ConsoleLogger? NormalLogger { get; set; }
+
+    private void OnValueChanged(DateTime ts)
+    {
+     
+
+    }
+
+}

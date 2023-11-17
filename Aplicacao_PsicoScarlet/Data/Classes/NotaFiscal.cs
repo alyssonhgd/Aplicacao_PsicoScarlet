@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 
-namespace AplicacaoAgendamento.Shared
+namespace Aplicacao_PsicoScarlet.Shared
 {
     public class NotaFiscal
     {

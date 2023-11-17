@@ -1,5 +1,6 @@
 ﻿@using Aplicacao_PsicoScarlet.Data
-
+@using Aplicacao_PsicoScarlet.Data.Models;
+@inject ToastService toastService
 @page "/cadastroPaciente"
 
 
@@ -9,55 +10,335 @@
 <br />
 <br />
 
-
+<!--Cabaçalho-->
 <div class="card">
+    
     <div class="card-header" style="background-color:lavender;border-radius:3px">
         <div class="text-lg-center" style="align-items:center">
-            <h3 class="card-title">Dados Pessoais</h3>
+            <h3 class="card-title" style="text-align:center;align-items:center">Dados Pessoais</h3>
         </div>
     </div>
-    <div class="card-body">
-        <EditForm Model="paciente">
-            <div class="form-row">
+
+
+    <!--Estrutura do card principal-->
+    <div class="card-body" >
+        <h3>Dados Paciente</h3>
+        <EditForm Model="modelPaciente" id="@formCadastro" OnValidSubmit="() => validacao()">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+
+            <!--Campo Nome-->
+            <div class="row gy-2 gx-3 align-items-center">
                 <div class="form-group col-md-4">
                     <span class="oi oi-person"></span> <label for="nome">Nome Completo</label>
-                    <InputText placehold="Nome Completo" class="form-control" @bind-Value="teste"> </InputText>
+                    <InputText placehold="Nome Completo" class="form-control" @bind-Value="modelPaciente.Nome"> </InputText>
+                    <ValidationMessage For="() => modelPaciente.Nome" />
                 </div>
 
-
+                <!-- Campo RG-->
                 <div class="form-group col-md-2">
-                    <br />
+                    <span class="oi oi oi-person"></span>
+                    <label for="rg">Rg</label>
+                    <InputText class="form-control"  @bind-Value="modelPaciente.RG" type="number"></InputText>
+                </div>
+
+                <!-- Campo CPF-->
+                <div class="form-group col-md-2">
+                    <span class="oi oi-document"></span>
+                    <label for="cpf">CPF</label>
+                    <InputText class="form-control"  @bind-Value="modelPaciente.Cpf" type="number"></InputText>
+                </div>
+
+                <!--Campo Data nascimento-->
+                <div class="form-group col-md-2">
                     <span class="oi oi-calendar"></span>
                     <label for="datNascimento">Data de Nascimento</label>
-                    <InputDate class="form-control" @bind-Value="data"></InputDate>
+                    <InputDate class="form-control" @bind-Value="modelPaciente.DataNascimento"></InputDate>
+                    <ValidationMessage For="() => modelPaciente.DataNascimento" />
                 </div>
 
-                <div class="form-group col-md-4">
-                    <br />
-                    <span class="oi oi-calendar"></span>
-                    <label for="datNascimento">Sexo</label>
-                    <InputSelect @bind-Value="escolha">
-                        <option value="@genero">Masculino</option>
-                        <option value="@genero">Feminino</option>
-                    </InputSelect>
-                </div>
-
+                <!-- Campo Genero-->
                 <div class="form-group col-md-2">
-                    <br />
+                    <span class="oi oi-person"></span>
+                    <label for="datNascimento">Sexo</label>
+                    <Select class="form-select" @bind-Value="modelPaciente.Genero">
+                        <Options>
+                            <SelectOption value="0" Text=""></SelectOption>
+                            <SelectOption value="1" Text="Masculino"></SelectOption>
+                            <SelectOption value="2" Text="Feminino"></SelectOption>
+                        </Options>
+                    </Select>
+                    <ValidationMessage For="() => modelPaciente.Genero" />
+                </div>
+
+                <!-- Campo Idade-->
+                <div class="form-group col-md-1">
+                    <span class="oi oi-calendar"></span>
+                    <label for="peso">Idade</label>
+                    <InputText class="form-control" typeof="fone" @bind-Value="modelPaciente.Idade" type="number"></InputText>
+                </div>
+
+
+                <!--Campo LocalNasicmento-->
+                <div class="form-group col-md-3">
+                    <span class="oi oi-heart"></span>
+                    <label for="localNasicmento">Local Nascimento</label>
+                    <InputText class="form-control" @bind-Value="modelPaciente.Altura"></InputText>
+                </div>
+
+                <!--Campo Composição Familiar-->
+                <div class="form-group col-md-3">
+                    <span class="oi oi-people"></span>
+                    <label for="composicaoFamiliar">Composição Familiar</label>
+                    <InputText class="form-control" @bind-Value="modelPaciente.ComposicaoFamiliar"></InputText>
+                </div>
+
+                <!--Campo Escola Paciente-->
+                <div class="form-group col-md-3">
+                    <span class="oi oi-pencil"></span>
+                    <label for="escolapaciente">Escola Paciente</label>
+                    <InputText class="form-control" @bind-Value="modelPaciente.EscolaDoPaciente"></InputText>
+                </div>
+
+                <!--Campo Serie escolar-->
+                <div class="form-group col-md-3">
+                    <span class="oi oi-pencil"></span>
+                    <label for="serieescolar">Série Escolar</label>
+                    <InputText class="form-control" @bind-Value="modelPaciente.SerieEscolar"></InputText>
+                </div>
+
+                <!--Campo Rendimento escolar-->
+                <div class="form-group col-md-3">
+                    <span class="oi oi-pencil"></span>
+                    <label for="rendimentoescolar">Rendimento Escolar</label>
+                    <InputText class="form-control" @bind-Value="modelPaciente.RendimentoEscolar"></InputText>
+                </div>
+
+              
+
+                <!--Fim do Row-->
+            </div>
+            <Divider></Divider>
+            <br />
+
+            <!--Segundo Row-->
+            <div class="row gy-2 gx-3 align-items-center">
+                <h2>Dados dos Familiares</h2>
+
+
+                <!-- Campo nomeMae-->
+                <div class="form-group col-md-4">
+                    <span class="oi oi-person"></span>
+                    <label for="nomeMae">Nome Mãe</label>
+                    <InputText class="form-control" typeof="phone" @bind-Value="modelPaciente.NomeMae" ></InputText>
+                    <ValidationMessage For="() => modelPaciente.NomeMae" />
+                </div>
+
+                <!-- Campo nomePai-->
+                <div class="form-group col-md-4">
+                    <span class="oi oi-person"></span>
+                    <label for="nomePai">Nome Pai</label>
+                    <InputText class="form-control" typeof="phone" @bind-Value="modelPaciente.NomePai"></InputText>
+                    <ValidationMessage For="() => modelPaciente.NomePai" />
+                </div>
+
+                <!-- Campo grau Instrucao Mae-->
+                <div class="form-group col-md-2">
+                    <span class="oi oi-pencil"></span>
+                    <label for="grauInstrucaoMae">Grau de Instrução da Mãe</label>
+                    <Select class="form-select" @bind-Value="modelPaciente.GrauInstrucaoMae">
+                        <Options>
+                            <SelectOption value="0" Text=""></SelectOption>
+                            <SelectOption value="1" Text="Analfabeto"></SelectOption>
+                            <SelectOption value="2" Text="Fundamental Incompleto"></SelectOption>
+                            <SelectOption value="3" Text="Fundamental Completo"></SelectOption>
+                            <SelectOption value="4" Text="Médio Incompleto"></SelectOption>
+                            <SelectOption value="5" Text="Médio Completo"></SelectOption>
+                            <SelectOption value="6" Text="Superior Incompleto"></SelectOption>
+                            <SelectOption value="7" Text="Superior Completo"></SelectOption>
+                        </Options>
+                    </Select>
+                    <ValidationMessage For="() => modelPaciente.GrauInstrucaoMae" />
+                </div>
+
+
+                <!-- Campo grau Instrucao Pai-->
+                <div class="form-group col-md-2">
+                    <span class="oi oi-pencil"></span>
+                    <label for="grauInstrucaopai">Grau de Instrução da Pai</label>
+                    <Select class="form-select" @bind-Value="modelPaciente.GrauInstrucaoPai">
+                        <Options>
+                            <SelectOption value="0" Text=""></SelectOption>
+                            <SelectOption value="1" Text="Analfabeto"></SelectOption>
+                            <SelectOption value="2" Text="Fundamental Incompleto"></SelectOption>
+                            <SelectOption value="3" Text="Fundamental Completo"></SelectOption>
+                            <SelectOption value="4" Text="Médio Incompleto"></SelectOption>
+                            <SelectOption value="5" Text="Médio Completo"></SelectOption>
+                            <SelectOption value="6" Text="Superior Incompleto"></SelectOption>
+                            <SelectOption value="7" Text="Superior Completo"></SelectOption>
+                        </Options>
+                    </Select>
+                    <ValidationMessage For="() => modelPaciente.GrauInstrucaoPai" />
+                </div>
+
+                <!-- Campo Idade Mãe-->
+                <div class="form-group col-md-1">
+                    <span class="oi oi-calendar"></span>
+                    <label for="idadeMae">Idade da Mãe</label>
+                    <InputText class="form-control"  @bind-Value="modelPaciente.IdadeMae" type="number"></InputText>
+                </div>
+
+                <!-- Campo Idade Pai-->
+                <div class="form-group col-md-1">
+                    <span class="oi oi-calendar"></span>
+                    <label for="idadePai">Idade do Pai</label>
+                    <InputText class="form-control" @bind-Value="modelPaciente.IdadePai" type="number"></InputText>
+                </div>
+
+                <!-- Campo Estado Civil Mae-->
+                <div class="form-group col-md-2">
+                    <span class="oi oi-crop"></span>
+                    <label for="estadocivilMae">Estado Civil Mãe</label>
+                    <Select class="form-select" @bind-Value="modelPaciente.EstadoCivilMae">
+                        <Options>
+                            <SelectOption value="0" Text=""></SelectOption>
+                            <SelectOption value="1" Text="Solteiro"></SelectOption>
+                            <SelectOption value="2" Text="Separado"></SelectOption>
+                            <SelectOption value="3" Text="União Estável"></SelectOption>
+                            <SelectOption value="4" Text="Casado"></SelectOption>
+                        </Options>
+                    </Select>
+                    <ValidationMessage For="() => modelPaciente.EstadoCivilMae" />
+                </div>
+
+                <!-- Campo Estado Civil Pai-->
+                <div class="form-group col-md-2">
+                    <span class="oi oi-crop"></span>
+                    <label for="estadocivilPai">Estado Civil Pai</label>
+                    <Select class="form-select" @bind-Value="modelPaciente.EstadoCIvilPai">
+                        <Options>
+                            <SelectOption value="0" Text=""></SelectOption>
+                            <SelectOption value="1" Text="Solteiro"></SelectOption>
+                            <SelectOption value="2" Text="Separado"></SelectOption>
+                            <SelectOption value="3" Text="União Estável"></SelectOption>
+                            <SelectOption value="4" Text="Casado"></SelectOption>
+                        </Options>
+                    </Select>
+                    <ValidationMessage For="() => modelPaciente.EstadoCIvilPai" />
+                </div>
+
+                <!-- Campo Religiao Mae-->
+                <div class="form-group col-md-4">
+                    <span class="oi oi-book"></span>
+                    <label for="religiaoMae">Religião da Mãe</label>
+                    <InputText class="form-control"  @bind-Value="modelPaciente.ReligiaoMae"></InputText>
+                    <ValidationMessage For="() => modelPaciente.ReligiaoMae" />
+                </div>
+
+                <!-- Campo Religiao Pai-->
+                <div class="form-group col-md-4">
+                    <span class="oi oi-book"></span>
+                    <label for="religiaoPai">Religião do Pai</label>
+                    <InputText class="form-control" @bind-Value="modelPaciente.ReligiaoPai"></InputText>
+                    <ValidationMessage For="() => modelPaciente.ReligiaoPai" />
+                </div>
+
+                <!-- Campo Profissao Mae-->
+                <div class="form-group col-md-4">
+                    <span class="oi oi-shield"></span>
+                    <label for="profissaoMae">Profissão da Mãe</label>
+                    <InputText class="form-control" @bind-Value="modelPaciente.ProfissaoMae"></InputText>
+                    <ValidationMessage For="() => modelPaciente.ProfissaoMae" />
+                </div>
+
+                <!-- Campo Profissao Pai-->
+                <div class="form-group col-md-4">
+                    <span class="oi oi-shield"></span>
+                    <label for="profissaoPai">Profissão do Pai</label>
+                    <InputText class="form-control" @bind-Value="modelPaciente.ProfissaoPai"></InputText>
+                    <ValidationMessage For="() => modelPaciente.ProfissaoPai" />
+                </div>
+
+                <!-- Campo Naturalidade Mae-->
+                <div class="form-group col-md-4">
+                    <span class="oi oi-pin"></span>
+                    <label for="naturalidade">Naturalidade da Mãe</label>
+                    <InputText class="form-control" @bind-Value="modelPaciente.NaturalidadeMae"></InputText>
+                    <ValidationMessage For="() => modelPaciente.NaturalidadeMae" />
+                </div>
+
+
+
+                <!-- Campo Naturalidade Pai-->
+                <div class="form-group col-md-4">
+                    <span class="oi oi-pin"></span>
+                    <label for="naturalidadePai">Naturalidade do Pai</label>
+                    <InputText class="form-control" @bind-Value="modelPaciente.NaturalidadePai"></InputText>
+                    <ValidationMessage For="() => modelPaciente.NaturalidadePai" />
+                </div>
+
+                <div class="row gy-2 gx-3 align-items-center">
+                <!-- Campo Quaixas ou motivos da consulta->
+                <div class="form-group col-md-4">
+                    <span class="oi oi-pulse"></span>
+                    <label for="queixas">Queixas que originaram a consulta</label>
+                            <InputTextArea class="form-control" @bind-Value="modelPaciente.QueixaAnterior" Placeholder="Breve descrição do que o paciente vem apresentando" rows="4"></InputTextArea>
+                    <ValidationMessage For="() => modelPaciente.QueixaAnterior" />
+                </div>
+
+                     <!-- Campo Quanto tempo apresentam as queixas->
+                    <div class="form-group col-md-3">
+                        <span class="oi oi-shield"></span>
+                        <label for="tempoqueixas">Quanto tempo o paciente vem apresentando as queixas</label>
+                            <InputText class="form-control" @bind-Value="modelPaciente.QuantoTempoQueixas"></InputText>
+                            <ValidationMessage For="() => modelPaciente.QuantoTempoQueixas" />
+                    </div>
+                    </div>
+
+            </div>
+
+
+            <!-- Ultimo Row-->
+            <div class="row gy-2 gx-3 align-items-center">
+                <!--Campo Email-->
+                <div class="form-group col-md-2">
                     <span class="oi oi-inbox"></span>
                     <label for="email">Email</label>
-                    <InputText class="form-control" typeof="email" @bind-Value="email"></InputText>
+                    <InputText class="form-control" typeof="email" placeholder="xxxx@xxx.com.br" @bind-Value="modelPaciente.Email"></InputText>
+                    <ValidationMessage For="() => modelPaciente.Email" />
                 </div>
 
-
-                <div class="form-group col-md--2">
-                    <br />
+                <!-- Campo TelefonePai-->
+                <div class="form-group col-md-2">
                     <span class="oi oi-phone"></span>
-                    <label for="email">Telefone</label>
-                    <InputText class="form-control" typeof="fone" @bind-Value="fone" type="number"></InputText>
+                    <label for="telefonePai">Telefone do Pai</label>
+                    <InputText class="form-control" typeof="phone" placeholder="xx 9xxxx-xxxx" @bind-Value="modelPaciente.TelefonePai" type="number"></InputText>
+                    <ValidationMessage For="() => modelPaciente.TelefonePai" />
                 </div>
+
+                        <!-- Campo TelefoneMae-->
+                        <div class="form-group col-md-2">
+                            <span class="oi oi-phone"></span>
+                            <label for="telefoneMae">Telefone da Mãe</label>
+                            <InputText class="form-control" typeof="phone"  placeholder="xx 9xxxx-xxxx" @bind-Value="modelPaciente.TelefoneMae" type="number"></InputText>
+                            <ValidationMessage For="() => modelPaciente.TelefoneMae" />
+                        </div>
+
             </div>
         </EditForm>
+
+        <br />
+        <div class="row gy-2 gx-3 align-items-center">
+            <br />
+            <div class="form-group col-md-3">
+            <button type="submit" form="@formCadastro" class="btn btn-success">Cadastrar Paciente</button>
+         
+        
+            <button type="reset" form="@formCadastro" @onclick="()=>limparCampos()" class="btn btn-danger">Limpar campos</button>
+            </div>
+        </div>
+
 
     </div>
 
@@ -65,21 +346,30 @@
     </div>
 </div>
 @code {
-    Paciente paciente = new Paciente();
-    public string teste = "";
-    public int num = 0;
-    public DateTime data = DateTime.Now.Date;
-    String[] genero;
-    String escolha;
-    string email = "";
-    string ddd;
-    string fone;
+    ModelPaciente modelPaciente = new ModelPaciente();
+    public string formCadastro = "formCadastroPaciente";
 
-    public class Paciente
+
+
+    public async void validacao()
     {
-        string Nome { get; set; } = String.Empty;
-        DateTime data { get; set; } = DateTime.Today;
-        String[] genero { get; set; }
-        String escolha { get; set; }
+        await OnSuccessClick();
+
+    }
+
+    private async Task OnSuccessClick()
+    {
+       
+        await toastService.Show(new ToastOption()
+            {
+                Category = ToastCategory.Success,
+                Title = "Successfully saved",
+                Content = "Save data successfully, automatically close after 4 seconds"
+            });
+    }
+
+    public void limparCampos()
+    {
+        modelPaciente = new ModelPaciente();
     }
 }

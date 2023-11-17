@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace AplicacaoAgendamento.Shared
+namespace Aplicacao_PsicoScarlet.Shared
 {
     public class Pagamento
     {

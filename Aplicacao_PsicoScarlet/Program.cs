@@ -1,12 +1,9 @@
 using Aplicacao_PsicoScarlet.Areas.Identity;
 using Aplicacao_PsicoScarlet.Data;
 using Aplicacao_PsicoScarlet.Data.Service;
-using AplicacaoAgendamento.Shared;
-using Microsoft.AspNetCore.Components;
+using Aplicacao_PsicoScarlet.Shared;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
