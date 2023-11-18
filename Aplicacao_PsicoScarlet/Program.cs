@@ -1,6 +1,7 @@
 using Aplicacao_PsicoScarlet.Areas.Identity;
 using Aplicacao_PsicoScarlet.Data;
 using Aplicacao_PsicoScarlet.Data.Service;
+using Aplicacao_PsicoScarlet.Data.Service.Interfaces;
 using Aplicacao_PsicoScarlet.Shared;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -22,8 +23,9 @@ builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuth
 builder.Services.AddSingleton<AgendaService>();
 builder.Services.AddSingleton<AtendimentoService>();
 builder.Services.AddSingleton<NotaFiscalService>();
-builder.Services.AddSingleton<PacienteService>();
-builder.Services.AddSingleton<Prontuario>();
+builder.Services.AddTransient<IPacienteService, PacienteService>();
+builder.Services.AddSingleton<ProntuarioService>();
+builder.Services.AddSingleton<PagamentoService>();
 builder.Services.AddBootstrapBlazor();
 
 var app = builder.Build();

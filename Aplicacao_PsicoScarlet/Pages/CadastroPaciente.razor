@@ -2,7 +2,7 @@
 @using Aplicacao_PsicoScarlet.Data.Models;
 @inject ToastService toastService
 @page "/cadastroPaciente"
-
+@inject HttpClient Http
 
 <div class="text-center" style="align-items:center">
     <h1 class="card-title">Cadastro Paciente</h1>
@@ -23,7 +23,7 @@
     <!--Estrutura do card principal-->
     <div class="card-body" >
         <h3>Dados Paciente</h3>
-        <EditForm Model="modelPaciente" id="@formCadastro" OnValidSubmit="() => validacao()">
+        <EditForm Model="@modelPaciente" id="@formCadastro" OnValidSubmit="() => validacao()">
             <DataAnnotationsValidator />
             <ValidationSummary />
 
@@ -115,7 +115,53 @@
                     <InputText class="form-control" @bind-Value="modelPaciente.RendimentoEscolar"></InputText>
                 </div>
 
-              
+
+                
+                <div class="row gy-2 gx-3 align-items-center">
+                    
+                    <!--Campo Cep-->
+                    <div class="form-group col-md-2">
+                        <span class="oi oi-pencil"></span>
+                        <label for="cep">Cep</label>
+                        <InputText class="form-control" @bind-Value="modelEndereco.Cep" ></InputText>
+                    </div>
+
+                    <div class="form-group col-md-1">
+                        <span></span>
+                            <button form="@formEndereco" onclick="@(()=>ConsultarCep())" @ref="myref" class="btn btn-primary">Consultar</button>
+                    </div>
+                </div>
+                
+               
+
+                <!--Campo Logradouro-->
+                <div class="form-group col-md-3">
+                    <span></span>
+                    <label for="logradouro">Logradouro</label>
+                    <InputText class="form-control" @bind-Value="modelEndereco.logradouro"></InputText>
+                </div>
+
+
+                <!--Campo Bairro-->
+                <div class="form-group col-md-3">
+                    <span></span>
+                    <label for="bairro">Bairro</label>
+                    <InputText class="form-control" @bind-Value="modelEndereco.bairro"></InputText>
+                </div>
+
+                <!--Campo cidade-->
+                <div class="form-group col-md-3">
+                    <span></span>
+                    <label for="cidade">Bairro</label>
+                    <InputText class="form-control" @bind-Value="modelEndereco.localidade"></InputText>
+                </div>
+
+                <!--Campo estado-->
+                <div class="form-group col-md-3">
+                    <span ></span>
+                    <label for="estado">Estado</label>
+                    <InputText class="form-control" @bind-Value="modelEndereco.uf"></InputText>
+                </div>
 
                 <!--Fim do Row-->
             </div>
@@ -347,9 +393,26 @@
 </div>
 @code {
     ModelPaciente modelPaciente = new ModelPaciente();
-    public string formCadastro = "formCadastroPaciente";
+    ModelEndereco modelEndereco = new ModelEndereco();
+    public string formCadastro = "formCadastro";
+    private string formEndereco = "formEndereco";
+    private ElementReference myref;  private string cep;
 
 
+    private async Task ConsultarCep()
+    {
+        // Substitua a URL abaixo pela sua API de CEP real
+        var apiUrl = $"https://viacep.com.br/ws/{modelEndereco.Cep}/json/";
+
+        try
+        {
+            modelEndereco = await Http.GetFromJsonAsync<ModelEndereco>(apiUrl);
+        }
+        catch (Exception ex)
+        {
+           modelEndereco.logradouro = "Erro ao consultar CEP";
+        }
+    }
 
     public async void validacao()
     {
